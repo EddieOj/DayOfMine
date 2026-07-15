@@ -286,6 +286,7 @@ const ASSETS = {
   study:{img:`${CDN}/assets/scenes/study.jpg`,vid:`${CDN}/assets/videos/study.mp4`,hls:`${CDN}/assets/videos/hls/study/index.m3u8`},
   scroll_phone:{img:`${CDN}/assets/scenes/scroll_phone.jpg`},
   lunch:{img:`${CDN}/assets/scenes/lunch.jpg`},
+  chat_baby:{img:`${CDN}/assets/scenes/chat_baby.jpg`},
   buy_dumpling:{img:`${CDN}/assets/scenes/buy_dumpling.jpg`},
 };
 
@@ -306,8 +307,13 @@ function loadScene(idx, scene) {
       el.innerHTML = '';
       el.appendChild(img);
       imgDone();
-      if (a.hls) loadHLS(el, a.hls);
-      else if (a.vid) loadMP4(el, a.vid);
+      // Wait 10s before upgrading to video
+      if (a.hls || a.vid) {
+        setTimeout(() => {
+          if (a.hls) loadHLS(el, a.hls);
+          else if (a.vid) loadMP4(el, a.vid);
+        }, 10000);
+      }
     };
     img.onerror = () => { imgDone(); };
   } else {
