@@ -86,7 +86,6 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'PingFang SC','Micr
 #bgm-btn .icon{animation:spin 3s linear infinite}
 #bgm-btn.muted .icon{animation:none}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js"></script>
 </head>
 <body>
 
@@ -316,32 +315,48 @@ function loadScene(idx, scene) {
 function loadHLS(el, src) {
   const v = document.createElement('video');
   v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
-  // Derive MP4 fallback path from HLS src
   const mp4 = src.replace('/hls/','/').replace('/index.m3u8','.mp4');
 
-  let fallbackTimer = setTimeout(() => loadMP4(el, mp4), 4000);
-
-  if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(src);
-    hls.attachMedia(v);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      clearTimeout(fallbackTimer);
-      el.innerHTML = '';
-      el.appendChild(v);
-      v.play().catch(()=>{});
-    });
-    hls.on(Hls.Events.ERROR, (e, data) => {
-      if (data.fatal) { clearTimeout(fallbackTimer); loadMP4(el, mp4); }
-    });
-  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+  // Safari native HLS — no extra library needed
+  if (v.canPlayType('application/vnd.apple.mpegurl')) {
     v.src = src;
-    v.onloadeddata = () => { clearTimeout(fallbackTimer); el.innerHTML = ''; el.appendChild(v); v.play().catch(()=>{}); };
-    v.onerror = () => { clearTimeout(fallbackTimer); loadMP4(el, mp4); };
-  } else {
-    clearTimeout(fallbackTimer);
-    loadMP4(el, mp4);
+    v.onloadeddata = () => { el.innerHTML = ''; el.appendChild(v); v.play().catch(()=>{}); };
+    v.onerror = () => loadMP4(el, mp4);
+    return;
   }
+
+  // Others: try dynamic hls.js load, fall back to MP4
+  loadHLSjs(el, v, src, mp4);
+}
+
+function loadHLSjs(el, v, src, mp4) {
+  // Check if already loaded
+  if (typeof Hls !== 'undefined') {
+    return initHls(el, v, src, mp4);
+  }
+  // Dynamic script injection
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js';
+  s.onload = () => initHls(el, v, src, mp4);
+  s.onerror = () => loadMP4(el, mp4);
+  document.body.appendChild(s);
+  // Timeout: if CDN doesn't load in 3s, fall back
+  setTimeout(() => { if (typeof Hls === 'undefined') loadMP4(el, mp4); }, 3000);
+}
+
+function initHls(el, v, src, mp4) {
+  if (typeof Hls === 'undefined' || !Hls.isSupported()) { loadMP4(el, mp4); return; }
+  const hls = new Hls();
+  hls.loadSource(src);
+  hls.attachMedia(v);
+  let fallback = setTimeout(() => loadMP4(el, mp4), 4000);
+  hls.on(Hls.Events.MANIFEST_PARSED, () => {
+    clearTimeout(fallback);
+    el.innerHTML = ''; el.appendChild(v); v.play().catch(()=>{});
+  });
+  hls.on(Hls.Events.ERROR, (e, data) => {
+    if (data.fatal) { clearTimeout(fallback); loadMP4(el, mp4); }
+  });
 }
 
 function loadMP4(el, src) {
