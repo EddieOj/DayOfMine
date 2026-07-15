@@ -1,0 +1,7 @@
+[
+  {"id":"sleep","label":"呼呼大睡","time":"00:00–08:00","image_file":"assets/scenes/sleep.jpg","video_file":"assets/videos/sleep.mp4"},
+  {"id":"wakeup","label":"起床咯","time":"08:00–08:30","image_file":"assets/scenes/wakeup.jpg","video_file":"assets/videos/wakeup.mp4"},
+  {"id":"wash","label":"洗漱","time":"08:30–09:00","image_file":"assets/scenes/wash.jpg","video_file":"assets/videos/wash.mp4"},
+  {"id":"login_game","label":"代号莺","time":"09:00–09:10","image_file":"assets/scenes/login_game.jpg","video_file":"assets/videos/login_game.mp4"},
+  {"id":"study","label":"学科一","time":"09:10–09:40","image_file":"assets/scenes/study.jpg","video_file":"assets/videos/study.mp4"}
+]
