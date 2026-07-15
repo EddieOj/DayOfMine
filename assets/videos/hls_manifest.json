@@ -1,7 +1,7 @@
 {
-  "login_game": "assets/videos/hls/login_game/index.m3u8",
-  "sleep": "assets/videos/hls/sleep/index.m3u8",
-  "study": "assets/videos/hls/study/index.m3u8",
-  "wakeup": "assets/videos/hls/wakeup/index.m3u8",
-  "wash": "assets/videos/hls/wash/index.m3u8"
+  "login_game": "E:\\Codex\\DayOfMine\\assets\\videos\\hls\\login_game\\index.m3u8",
+  "sleep": "E:\\Codex\\DayOfMine\\assets\\videos\\hls\\sleep\\index.m3u8",
+  "study": "E:\\Codex\\DayOfMine\\assets\\videos\\hls\\study\\index.m3u8",
+  "wakeup": "E:\\Codex\\DayOfMine\\assets\\videos\\hls\\wakeup\\index.m3u8",
+  "wash": "E:\\Codex\\DayOfMine\\assets\\videos\\hls\\wash\\index.m3u8"
 }

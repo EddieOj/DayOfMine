@@ -1,7 +1,65 @@
 [
-  {"id":"sleep","label":"呼呼大睡","time":"00:00–08:00","image_file":"assets/scenes/sleep.jpg","video_file":"assets/videos/sleep.mp4"},
-  {"id":"wakeup","label":"起床咯","time":"08:00–08:30","image_file":"assets/scenes/wakeup.jpg","video_file":"assets/videos/wakeup.mp4"},
-  {"id":"wash","label":"洗漱","time":"08:30–09:00","image_file":"assets/scenes/wash.jpg","video_file":"assets/videos/wash.mp4"},
-  {"id":"login_game","label":"代号莺","time":"09:00–09:10","image_file":"assets/scenes/login_game.jpg","video_file":"assets/videos/login_game.mp4"},
-  {"id":"study","label":"学科一","time":"09:10–09:40","image_file":"assets/scenes/study.jpg","video_file":"assets/videos/study.mp4"}
+  {
+    "id": "sleep",
+    "label": "呼呼大睡",
+    "time": "00:00–08:00",
+    "image_file": "assets/scenes/sleep.jpg",
+    "video_file": "assets/videos/sleep.mp4"
+  },
+  {
+    "id": "wakeup",
+    "label": "起床咯",
+    "time": "08:00–08:30",
+    "image_file": "assets/scenes/wakeup.jpg",
+    "video_file": "assets/videos/wakeup.mp4"
+  },
+  {
+    "id": "wash",
+    "label": "洗漱",
+    "time": "08:30–09:00",
+    "image_file": "assets/scenes/wash.jpg",
+    "video_file": "assets/videos/wash.mp4"
+  },
+  {
+    "id": "login_game",
+    "label": "代号莺",
+    "time": "09:00–09:10",
+    "image_file": "assets/scenes/login_game.jpg",
+    "video_file": "assets/videos/login_game.mp4"
+  },
+  {
+    "id": "study",
+    "label": "学科一",
+    "time": "09:10–09:40",
+    "image_file": "assets/scenes/study.jpg",
+    "video_file": "assets/videos/study.mp4"
+  },
+  {
+    "id": "scroll_phone",
+    "label": "刷手机",
+    "time": "10:00–11:00",
+    "image_file": "assets/scenes/scroll_phone.jpg",
+    "video_file": null
+  },
+  {
+    "id": "lunch",
+    "label": "吃饭",
+    "time": "11:00–12:00",
+    "image_file": "assets/scenes/lunch.jpg",
+    "video_file": null
+  },
+  {
+    "id": "chat_baby",
+    "label": "和宝宝聊天",
+    "time": "12:00–15:00",
+    "image_file": "assets/scenes/chat_baby.jpg",
+    "video_file": null
+  },
+  {
+    "id": "buy_dumpling",
+    "label": "买饺子皮",
+    "time": "15:00–15:30",
+    "image_file": "assets/scenes/buy_dumpling.jpg",
+    "video_file": null
+  }
 ]
