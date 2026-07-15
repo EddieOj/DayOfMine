@@ -98,7 +98,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'PingFang SC','Micr
 
 <!-- BGM -->
 <audio id="bgm" loop preload="none">
-  <source src="assets/bgm/NIGHT DANCER.mp3" type="audio/mpeg">
+  <source src="https://cdn.jsdelivr.net/gh/EddieOj/DayOfMine@master/assets/bgm/NIGHT%20DANCER.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Particles -->
@@ -276,16 +276,17 @@ function pDraw(){
 }
 pDraw();
 
-// ── Asset manifest ──────────────────────────────────────────
+// ── Asset manifest (CDN-backed) ────────────────────────────
+const CDN = 'https://cdn.jsdelivr.net/gh/EddieOj/DayOfMine@master';
 const ASSETS = {
-  sleep:{img:'assets/scenes/sleep.jpg',vid:'assets/videos/sleep.mp4',hls:'assets/videos/hls/sleep/index.m3u8'},
-  wakeup:{img:'assets/scenes/wakeup.jpg',vid:'assets/videos/wakeup.mp4',hls:'assets/videos/hls/wakeup/index.m3u8'},
-  wash:{img:'assets/scenes/wash.jpg',vid:'assets/videos/wash.mp4',hls:'assets/videos/hls/wash/index.m3u8'},
-  login_game:{img:'assets/scenes/login_game.jpg',vid:'assets/videos/login_game.mp4',hls:'assets/videos/hls/login_game/index.m3u8'},
-  study:{img:'assets/scenes/study.jpg',vid:'assets/videos/study.mp4',hls:'assets/videos/hls/study/index.m3u8'},
-  scroll_phone:{img:'assets/scenes/scroll_phone.jpg'},
-  lunch:{img:'assets/scenes/lunch.jpg'},
-  buy_dumpling:{img:'assets/scenes/buy_dumpling.jpg'},
+  sleep:{img:`${CDN}/assets/scenes/sleep.jpg`,vid:`${CDN}/assets/videos/sleep.mp4`,hls:`${CDN}/assets/videos/hls/sleep/index.m3u8`},
+  wakeup:{img:`${CDN}/assets/scenes/wakeup.jpg`,vid:`${CDN}/assets/videos/wakeup.mp4`,hls:`${CDN}/assets/videos/hls/wakeup/index.m3u8`},
+  wash:{img:`${CDN}/assets/scenes/wash.jpg`,vid:`${CDN}/assets/videos/wash.mp4`,hls:`${CDN}/assets/videos/hls/wash/index.m3u8`},
+  login_game:{img:`${CDN}/assets/scenes/login_game.jpg`,vid:`${CDN}/assets/videos/login_game.mp4`,hls:`${CDN}/assets/videos/hls/login_game/index.m3u8`},
+  study:{img:`${CDN}/assets/scenes/study.jpg`,vid:`${CDN}/assets/videos/study.mp4`,hls:`${CDN}/assets/videos/hls/study/index.m3u8`},
+  scroll_phone:{img:`${CDN}/assets/scenes/scroll_phone.jpg`},
+  lunch:{img:`${CDN}/assets/scenes/lunch.jpg`},
+  buy_dumpling:{img:`${CDN}/assets/scenes/buy_dumpling.jpg`},
 };
 
 // ── Load images first, then try HLS video ──────────────────
