@@ -86,7 +86,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'PingFang SC','Micr
 #bgm-btn .icon{animation:spin 3s linear infinite}
 #bgm-btn.muted .icon{animation:none}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js"></script>
 </head>
 <body>
 
@@ -315,29 +315,31 @@ function loadScene(idx, scene) {
 
 function loadHLS(el, src) {
   const v = document.createElement('video');
-  v.muted = true;
-  v.loop = true;
-  v.playsInline = true;
-  if (Hls.isSupported()) {
+  v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+  // Derive MP4 fallback path from HLS src
+  const mp4 = src.replace('/hls/','/').replace('/index.m3u8','.mp4');
+
+  let fallbackTimer = setTimeout(() => loadMP4(el, mp4), 4000);
+
+  if (typeof Hls !== 'undefined' && Hls.isSupported()) {
     const hls = new Hls();
     hls.loadSource(src);
     hls.attachMedia(v);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      clearTimeout(fallbackTimer);
       el.innerHTML = '';
       el.appendChild(v);
       v.play().catch(()=>{});
     });
+    hls.on(Hls.Events.ERROR, (e, data) => {
+      if (data.fatal) { clearTimeout(fallbackTimer); loadMP4(el, mp4); }
+    });
   } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
-    // Safari native HLS
     v.src = src;
-    v.onloadeddata = () => {
-      el.innerHTML = '';
-      el.appendChild(v);
-      v.play().catch(()=>{});
-    };
+    v.onloadeddata = () => { clearTimeout(fallbackTimer); el.innerHTML = ''; el.appendChild(v); v.play().catch(()=>{}); };
+    v.onerror = () => { clearTimeout(fallbackTimer); loadMP4(el, mp4); };
   } else {
-    // HLS not supported — fall back to MP4
-    const mp4 = src.replace('hls/','').replace('/index.m3u8','.mp4');
+    clearTimeout(fallbackTimer);
     loadMP4(el, mp4);
   }
 }
