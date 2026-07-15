@@ -1,0 +1,7 @@
+{
+  "login_game": "assets/videos/hls/login_game/index.m3u8",
+  "sleep": "assets/videos/hls/sleep/index.m3u8",
+  "study": "assets/videos/hls/study/index.m3u8",
+  "wakeup": "assets/videos/hls/wakeup/index.m3u8",
+  "wash": "assets/videos/hls/wash/index.m3u8"
+}

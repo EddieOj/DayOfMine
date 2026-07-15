@@ -86,6 +86,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'PingFang SC','Micr
 #bgm-btn .icon{animation:spin 3s linear infinite}
 #bgm-btn.muted .icon{animation:none}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
 
@@ -134,9 +135,13 @@ const S = [
   {id:'wash',        t:'08:30–09:00', l:'洗漱',       e:'🪥', c:['#74b9ff','#a8e6cf'], d:['💧','🪥','🪞']},
   {id:'login_game',  t:'09:00–09:10', l:'代号莺',      e:'📱', c:['#7c4dff','#b388ff'], d:['📱','🎮','💎']},
   {id:'study',       t:'09:10–09:40', l:'学科一',     e:'📚', c:['#4834d4','#6c5ce7'], d:['📚','✏️','📝']},
+  {id:'scroll_phone',t:'10:00–11:00', l:'刷手机',     e:'📱', c:['#a29bfe','#6c5ce7'], d:['📱','🛋️','💬']},
+  {id:'lunch',       t:'11:00–12:00', l:'吃饭',       e:'🍚', c:['#fdcb6e','#e17055'], d:['🍚','🥢','🥗']},
+  {id:'chat_baby',   t:'12:00–15:00', l:'和宝宝聊天', e:'💕', c:['#fd79a8','#e84393'], d:['💕','📱','😊']},
+  {id:'buy_dumpling',t:'15:00–15:30', l:'买饺子皮',   e:'🥟', c:['#81ecec','#00cec9'], d:['🥟','🛍️','☀️']},
 ];
 
-const CI = ['🌙','☀️','☀️','📱','📚'];
+const CI = ['🌙','☀️','☀️','📱','📚','📱','🍚','💕','🥟'];
 let i = 0, anim = false;
 const track = document.getElementById('track');
 const tl = document.getElementById('timeline');
@@ -272,58 +277,83 @@ function pDraw(){
 }
 pDraw();
 
-// ── Asset manifest (inline, no fetch needed) ─────────────────
+// ── Asset manifest ──────────────────────────────────────────
 const ASSETS = {
-  sleep:{img:'assets/scenes/sleep.jpg',vid:'assets/videos/sleep.mp4'},
-  wakeup:{img:'assets/scenes/wakeup.jpg',vid:'assets/videos/wakeup.mp4'},
-  wash:{img:'assets/scenes/wash.jpg',vid:'assets/videos/wash.mp4'},
-  login_game:{img:'assets/scenes/login_game.jpg',vid:'assets/videos/login_game.mp4'},
-  study:{img:'assets/scenes/study.jpg',vid:'assets/videos/study.mp4'},
+  sleep:{img:'assets/scenes/sleep.jpg',vid:'assets/videos/sleep.mp4',hls:'assets/videos/hls/sleep/index.m3u8'},
+  wakeup:{img:'assets/scenes/wakeup.jpg',vid:'assets/videos/wakeup.mp4',hls:'assets/videos/hls/wakeup/index.m3u8'},
+  wash:{img:'assets/scenes/wash.jpg',vid:'assets/videos/wash.mp4',hls:'assets/videos/hls/wash/index.m3u8'},
+  login_game:{img:'assets/scenes/login_game.jpg',vid:'assets/videos/login_game.mp4',hls:'assets/videos/hls/login_game/index.m3u8'},
+  study:{img:'assets/scenes/study.jpg',vid:'assets/videos/study.mp4',hls:'assets/videos/hls/study/index.m3u8'},
 };
 
-// ── Load images first (fast), then lazy-load videos ─────────
+// ── Load images first, then try HLS video ──────────────────
 let imgsLoaded = 0;
 const total = S.length;
 
 function loadScene(idx, scene) {
   const el = document.getElementById(`mc-${scene.id}`);
-  if (!el) { checkDone(); return; }
+  if (!el) { imgDone(); return; }
   const a = ASSETS[scene.id];
-  if (!a) { checkDone(); return; }
 
-  if (a.img) {
+  if (a && a.img) {
     const img = document.createElement('img');
     img.src = a.img;
     img.alt = '';
     img.onload = () => {
       el.innerHTML = '';
       el.appendChild(img);
-      checkDone();
-      // Start loading video in background
-      if (a.vid) loadBGVideo(el, a.vid);
+      imgDone();
+      if (a.hls) loadHLS(el, a.hls);
+      else if (a.vid) loadMP4(el, a.vid);
     };
-    img.onerror = () => { checkDone(); };
+    img.onerror = () => { imgDone(); };
   } else {
-    checkDone();
+    // No assets — keep placeholder
+    imgDone();
   }
 }
 
-function loadBGVideo(el, src) {
+function loadHLS(el, src) {
   const v = document.createElement('video');
   v.muted = true;
   v.loop = true;
   v.playsInline = true;
-  v.preload = 'auto';
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(src);
+    hls.attachMedia(v);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      el.innerHTML = '';
+      el.appendChild(v);
+      v.play().catch(()=>{});
+    });
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    // Safari native HLS
+    v.src = src;
+    v.onloadeddata = () => {
+      el.innerHTML = '';
+      el.appendChild(v);
+      v.play().catch(()=>{});
+    };
+  } else {
+    // HLS not supported — fall back to MP4
+    const mp4 = src.replace('hls/','').replace('/index.m3u8','.mp4');
+    loadMP4(el, mp4);
+  }
+}
+
+function loadMP4(el, src) {
+  const v = document.createElement('video');
+  v.muted = true; v.loop = true; v.playsInline = true;
   v.onloadeddata = () => {
     el.innerHTML = '';
     el.appendChild(v);
     v.play().catch(()=>{});
   };
-  // Don't retry on error - image is already showing
   v.src = src;
 }
 
-function checkDone() {
+function imgDone() {
   imgsLoaded++;
   loadFill.style.width = Math.min(100, (imgsLoaded / total) * 100) + '%';
   if (imgsLoaded >= total) {
@@ -331,7 +361,6 @@ function checkDone() {
   }
 }
 
-// Start loading all scenes (images first)
 S.forEach((s, i) => loadScene(i, s));
 
 // ── BGM ────────────────────────────────────────────────────

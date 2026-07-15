@@ -22,6 +22,18 @@ SCENES = [
     {"id":"study","t":"09:10–09:40","l":"学科一",
      "pt":"cute chibi girl with long black wavy hair studying at desk, driving test book and laptop, reading seriously, concentrated expression, flat vector illustration, soft indigo tones",
      "pv":"cute girl studying seriously, turning pages, thinking pose, focused learning atmosphere"},
+    {"id":"scroll_phone","t":"10:00–11:00","l":"刷手机",
+     "pt":"cute chibi girl with long black wavy hair lying on sofa scrolling phone, relaxing, casual clothes, warm indoor lighting, flat vector art, soft colors",
+     "pv":"cute girl lying on sofa scrolling phone, relaxed, changing expressions while browsing"},
+    {"id":"lunch","t":"11:00–12:00","l":"吃饭",
+     "pt":"cute chibi girl with long black wavy hair eating lunch at table, rice and dishes, chopsticks, warm dining atmosphere, flat vector illustration, soft warm colors",
+     "pv":"cute girl eating lunch happily, chopsticks picking up food, satisfied eating"},
+    {"id":"chat_baby","t":"12:00–15:00","l":"和宝宝聊天",
+     "pt":"cute chibi girl with long black wavy hair video chatting on phone, smiling happily at screen, cozy room, warm lighting, flat vector art, pinkish warm tones",
+     "pv":"cute girl video chatting on phone, laughing and talking, warm and happy conversation atmosphere"},
+    {"id":"buy_dumpling","t":"15:00–15:30","l":"买饺子皮",
+     "pt":"cute chibi girl with long black wavy hair walking outside to shop, holding small bag, street with shops, daytime, flat vector illustration, soft outdoor lighting",
+     "pv":"cute girl walking outside to buy dumpling wrappers, cheerful steps, outdoor daylight"},
 ]
 
 assets_dir = Path(__file__).parent.parent / "assets"
